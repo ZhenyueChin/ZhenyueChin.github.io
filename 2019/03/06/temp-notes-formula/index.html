@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>temp-notes-formula | Deep Mental Artificial Intelligence</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="forsigner,前端,设计,Hexo主题,前端开发,用户体验,设计,frontend,design,nodejs,JavaScript">
+  
+
+  <meta name="description" content="\begin{equation} \sigma(x) = \frac{1}{1 + e^{-x}} \end{equation} \begin{equation} \frac{d \sigma(x)}{dx} = (1 - \sigma(x)) (\sigma(x)) \end{equation}$\sigma(x)$ has the biggest gradient at the positi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="temp-notes-formula">
+<meta property="og:url" content="https://zhenyueqin.github.io/2019/03/06/temp-notes-formula/index.html">
+<meta property="og:site_name" content="Deep Mental Artificial Intelligence">
+<meta property="og:description" content="\begin{equation} \sigma(x) = \frac{1}{1 + e^{-x}} \end{equation} \begin{equation} \frac{d \sigma(x)}{dx} = (1 - \sigma(x)) (\sigma(x)) \end{equation}$\sigma(x)$ has the biggest gradient at the positi">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-04-01T07:00:31.733Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="temp-notes-formula">
+<meta name="twitter:description" content="\begin{equation} \sigma(x) = \frac{1}{1 + e^{-x}} \end{equation} \begin{equation} \frac{d \sigma(x)}{dx} = (1 - \sigma(x)) (\sigma(x)) \end{equation}$\sigma(x)$ has the biggest gradient at the positi">
+
+  
+
+  
+    <link rel="icon" href="/images/general/Hua-Round.png">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-temp-notes-formula" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">temp-notes-formula</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.03.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Zhenyue Qin</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <script type="math/tex; mode=display">
+\begin{equation}
+\sigma(x) = \frac{1}{1 + e^{-x}}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\frac{d \sigma(x)}{dx} = (1 - \sigma(x)) (\sigma(x))
+\end{equation}</script><p>$\sigma(x)$ has the biggest gradient at the position $x = 0$, as </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\frac{d \sigma(x)}{dx} &= \frac{e^{-x}}{(1 + e^{-x})^{2}} = \big( \frac{1 + e^{-x} - 1}{1 + e^{-x}} \big) \big( \frac{1}{1 + e^{-x}} \big) = (1 - \sigma(x)) (\sigma(x)) = 0 \\
+
+
+&=> \big( \frac{1 + e^{-x} - 1}{1 + e^{-x}} \big) \big( \frac{1}{1 + e^{-x}} \big) = 0 \\ 
+
+&=> x = 0
+
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\frac{d \sigma( \sigma(x) )}{dx} &= \frac{d \sigma( \sigma(x) )}{d \sigma(x)} \frac{d \sigma{(x)}}{dx} \\ 
+&= (1 - \sigma(\sigma(x))) (\sigma(\sigma(x))) \cdot (1 - \sigma(x)) (\sigma(x))
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+(1 - \sigma(\sigma(0))) (\sigma(\sigma(0))) &\cdot (1 - \sigma(0)) (\sigma(0)) \\ 
+&= (1 - \sigma(\sigma(0))) (\sigma(\sigma(0))) \cdot \frac{1}{4} \\ 
+&= (1 - \sigma(\frac{1}{2})) (\sigma(\frac{1}{2})) \cdot \frac{1}{4}
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+x := x - \alpha \cdot \text(gradient)</script>
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == true ? true : false;
+        var verify = 'true' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "",
+            appKey: "",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
