@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-page">
+  <html class="light page-post">
 
 
 <head><meta name="generator" content="Hexo 3.8.0">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>分类 | Deep Mental Artificial Intelligence</title>
+  <title>Deep Mental Artificial Intelligence</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,14 +15,17 @@
     <meta name="keywords" content="Deep Learning, Machine Learning">
   
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="https://zhenyueqin.github.io/categories/index.html">
+  <meta name="description" content="—-Induction of Expectation Algorithm:title: Learning Notes on Mutual Informationdate: 2019-02-13 10:30:27tags: Learning Notescategories: Computer Visionpublished: true mathjax: trueNon-Negativity of M">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Mental Artificial Intelligence">
+<meta property="og:url" content="https://zhenyueqin.github.io/2019/05/10/learning-notes-mutual-info/index.html">
 <meta property="og:site_name" content="Deep Mental Artificial Intelligence">
+<meta property="og:description" content="—-Induction of Expectation Algorithm:title: Learning Notes on Mutual Informationdate: 2019-02-13 10:30:27tags: Learning Notescategories: Computer Visionpublished: true mathjax: trueNon-Negativity of M">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-04-01T07:00:31.733Z">
+<meta property="og:updated_time" content="2019-04-01T20:46:09.989Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分类">
+<meta name="twitter:title" content="Deep Mental Artificial Intelligence">
+<meta name="twitter:description" content="—-Induction of Expectation Algorithm:title: Learning Notes on Mutual Informationdate: 2019-02-13 10:30:27tags: Learning Notescategories: Computer Visionpublished: true mathjax: trueNon-Negativity of M">
 
   
 
@@ -136,14 +139,14 @@
 
 
 <div class="content content-post CENTER">
-   <article id="page-" class="article article-type-page" itemprop="blogPost">
+   <article id="post-learning-notes-mutual-info" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">分类</h1>
+    <h1 class="post-title">(no title)</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2018.01.23</span>
+        <span>2019.05.10</span>
       </span>
 
       
@@ -165,7 +168,15 @@
 
   <div class="article-content">
     
-      
+      <p>—-Induction of Expectation Algorithm:<br>title: Learning Notes on Mutual Information<br>date: 2019-02-13 10:30:27<br>tags: Learning Notes<br>categories: Computer Vision<br>published: true</p>
+<h2 id="mathjax-true"><a href="#mathjax-true" class="headerlink" title="mathjax: true"></a>mathjax: true</h2><h1 id="Non-Negativity-of-Mutual-Information"><a href="#Non-Negativity-of-Mutual-Information" class="headerlink" title="Non-Negativity of Mutual Information"></a>Non-Negativity of Mutual Information</h1><script type="math/tex; mode=display">
+\begin{align}
+I(X;Y)    &= \int_{x} \int_{y} p(x, y) \log \frac{p(x, y)}{p(x)p(y)} dx dy \\ 
+        &= - \int_{x} \int_{y} p(x, y) \log \frac{p(x) p(y)}{p(x, y)} dx dy \\
+        &\geq - \log \int_{x} \int_{y} p(x, y) \frac{p(x) p(y)}{p(x, y)} dx dy \\
+        &= - \log \int_{x} p(x) dx \int_{y} p(y) dy \\ 
+        &= 0
+\end{align}</script>
     
   </div>
 
@@ -241,6 +252,48 @@
 </div>
 
 
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == true ? true : false;
+        var verify = 'true' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "",
+            appKey: "",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
 
   
 

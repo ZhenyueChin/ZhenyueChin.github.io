@@ -7,7 +7,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Learning Notes on Evidence of Lower Bound Observation | Deep Mental Artificial Intelligence</title>
+  <title>Paper Notes on Fixing a Broken ELBO | Deep Mental Artificial Intelligence</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,14 +15,22 @@
     <meta name="keywords" content="Deep Learning, Machine Learning">
   
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="Learning Notes on Evidence of Lower Bound Observation">
-<meta property="og:url" content="https://zhenyueqin.github.io/2019/04/08/learning-notes-elbo/index.html">
+  <meta name="description" content="1. Why we say ELBO is brokenEvidence of Lower Bound Observation (ELBO) is defined as  \begin{equation} \log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + D_{KL} \big [ e(z | x) ||">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paper Notes on Fixing a Broken ELBO">
+<meta property="og:url" content="https://zhenyueqin.github.io/2019/06/10/paper-notes-ELBO-fix/index.html">
 <meta property="og:site_name" content="Deep Mental Artificial Intelligence">
+<meta property="og:description" content="1. Why we say ELBO is brokenEvidence of Lower Bound Observation (ELBO) is defined as  \begin{equation} \log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + D_{KL} \big [ e(z | x) ||">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-04-08T12:14:18.834Z">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/06/10/paper-notes-ELBO-fix/Balanced.png">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/06/10/paper-notes-ELBO-fix/Max-D.png">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/06/10/paper-notes-ELBO-fix/Min-D.png">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/06/10/paper-notes-ELBO-fix/ELBO-Formula.png">
+<meta property="og:updated_time" content="2019-06-10T10:51:58.288Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Learning Notes on Evidence of Lower Bound Observation">
+<meta name="twitter:title" content="Paper Notes on Fixing a Broken ELBO">
+<meta name="twitter:description" content="1. Why we say ELBO is brokenEvidence of Lower Bound Observation (ELBO) is defined as  \begin{equation} \log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + D_{KL} \big [ e(z | x) ||">
+<meta name="twitter:image" content="https://zhenyueqin.github.io/2019/06/10/paper-notes-ELBO-fix/Balanced.png">
 
   
 
@@ -136,14 +144,14 @@
 
 
 <div class="content content-post CENTER">
-   <article id="post-learning-notes-elbo" class="article article-type-post" itemprop="blogPost">
+   <article id="post-paper-notes-ELBO-fix" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">Learning Notes on Evidence of Lower Bound Observation</h1>
+    <h1 class="post-title">Paper Notes on Fixing a Broken ELBO</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2019.04.08</span>
+        <span>2019.06.10</span>
       </span>
 
       
@@ -154,11 +162,6 @@
       
 
       
-  <span class="article-category">
-    <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-  </span>
-
 
 
       
@@ -170,7 +173,49 @@
 
   <div class="article-content">
     
-      
+      <h1 id="1-Why-we-say-ELBO-is-broken"><a href="#1-Why-we-say-ELBO-is-broken" class="headerlink" title="1. Why we say ELBO is broken"></a>1. Why we say ELBO is broken</h1><p>Evidence of Lower Bound Observation (ELBO) is defined as</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + D_{KL} \big [ e(z | x) || m(z) \big ] 
+\end{equation}</script><p>where <script type="math/tex">e</script> stands for “encoder”, <script type="math/tex">d</script> refers to “decoder”, and <script type="math/tex">m</script> represents marginal. Intuitively, the only thing that this formula says is that <script type="math/tex">z</script> should contain as much information as <script type="math/tex">x</script>, and maximally utilise the prior <script type="math/tex">m(z)</script>. </p>
+<p>Nonetheless and importantly, it does not constraint the balance between these two conflicting objectives. This is problematic since two VAEs may have the same ELBO yet different balances of <script type="math/tex">E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]</script> and <script type="math/tex">D_{KL} \big [ e(z | x) || m(z) \big ]</script>. </p>
+<p>This paper tackles this neglance by introduces a coefficient <script type="math/tex">\beta</script> to adjust the balance of the two terms above. The formula becomes </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + \beta \cdot D_{KL} \big [ e(z | x) || m(z) \big ] 
+\end{equation}</script><p>This form is exactly the same as <script type="math/tex">\beta</script>-VAE, but is derived from the perspective of information theory. To begin with, we define three terms: </p>
+<ol>
+<li><script type="math/tex; mode=display">H \equiv - E_{x \sim p^{*}} \big[ \log p^{*}(x) \big ]</script></li>
+<li><script type="math/tex; mode=display">D \equiv - E_{x \sim p^{*}} \big[ E_{z \sim e(z | x)} \big [ \log d(x | z) \big ] \big ]</script></li>
+<li><script type="math/tex; mode=display">R \equiv E_{x \sim p^{*}} D_{KL} \big [ e(z | x) || m(z) \big ]</script></li>
+</ol>
+<p>So that</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+ELBO = -(D + R)
+\end{equation}</script><p>Intuitively, <script type="math/tex">D</script> is the distortion, or reconstruction error, <script type="math/tex">R</script> is the extra bits to express <script type="math/tex">x</script> from the prior <script type="math/tex">z</script>. Apparently, more <script type="math/tex">R</script> can lead to less <script type="math/tex">D</script> since we have more information about <script type="math/tex">x</script>. We present visualisations in this article.</p>
+<p>We vary the content of <script type="math/tex">e(z | x)</script> and <script type="math/tex">m(z)</script>. Please note that <script type="math/tex">m(z)</script>‘s volume varies and it can be zero for some input <script type="math/tex">x</script>. The first figure shows that the reconstruction can decrease its quality. All of these figures follow the assumption that decoders are perfect to maximally leverage the incoming information. </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/Balanced.png" width="400" hspace="10">
+</center>
+
+<p>The following two figures show cases when distortion <script type="math/tex">D</script> is maximised or minimised.<br>Distortion Maximisation: </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/Max-D.png" width="400" hspace="10">
+</center>
+
+<p>Distortion Minimisation: </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/Min-D.png" width="400" hspace="10">
+</center>
+
+<p>ELBO Formula: </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/ELBO-Formula.png" width="400" hspace="10">
+</center>
+
+<p>Intuitively, we have <script type="math/tex">H - R >= D</script>, since all the information we have about <script type="math/tex">x</script> is from <script type="math/tex">R</script>. Nonetheless, our encoders and decoders may not be perfect and lose information, so the inequality holds. </p>
+
     
   </div>
 
