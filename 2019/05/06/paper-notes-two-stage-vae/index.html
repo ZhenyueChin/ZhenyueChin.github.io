@@ -1,22 +1,96 @@
-extends views/main.pug
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Zhenyue Qin"><link rel="alternative" href="/atom.xml" title="Deep Mental Artificial Intelligence" type="application/atom+xml"><link rel="icon" href="/images/general/Hua-Round.png"><title>Learning Notes of Diagnosing and Enhancing VAE Models - Deep Mental Artificial Intelligence</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">Deep Mental Artificial Intelligence</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">目录</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time class="post__time" datetime="2019-05-06T05:47:24.000Z">2019 - 05 - 06 15:47:24</time><h1 class="post__title"><a href="/2019/05/06/paper-notes-two-stage-vae/">Learning Notes of Diagnosing and Enhancing VAE Models</a></h1><div class="post__main echo"><p>I was frustrated with the poor performance given by my VAE models so I decided to explore VAE models that can produce sharp images. The two-stage VAE was attractive because of its image qualities and remarkable FID scores that are even comparable with GANs. This is the motivation of me reading this paper to learn the techniques of producing visual-pleasing images, which hopefully can reverse the contemporary situation that GANs are much more favourable than VAEs in industry. </p>
+<h1 id="1-Succinct-Synopsis"><a href="#1-Succinct-Synopsis" class="headerlink" title="1. Succinct Synopsis"></a>1. Succinct Synopsis</h1><p>People have been long believed that the Gaussian prior postulation is the cause of unrealistic generative results of VAEs. Dai and Wipf argue that this belief is misleading. With the assumption that input images lie on a lower dimensional manifold, they claim that the variational prior <script type="math/tex">q_{\Phi}(\mathbf{z})</script> of VAE is guaranteed to diverge from the predefined prior <script type="math/tex">p_{\theta}(\mathbf{z})</script>. To address this divergence, Dai and Wipf train a second VAE to learn the mapping from the prior <script type="math/tex">p_{\theta}(\mathbf{z})</script> to the variational prior <script type="math/tex">q_{\Phi}(\mathbf{z})</script>, in addition with the conventional VAE of learning the latent variable <script type="math/tex">\mathbf{z}</script> of the input <script type="math/tex">\mathbf{x}</script>. The architecture of their two-stage VAE is as follows: </p>
+<center>
+<img src="/2019/05/06/paper-notes-two-stage-vae/two-stage-architecture.jpg" width="400" hspace="10">
+</center>
 
-block head
-  title
-    = page.title + ' - ' + config.title
+<h1 id="2-Comprehensive-Summation"><a href="#2-Comprehensive-Summation" class="headerlink" title="2. Comprehensive Summation"></a>2. Comprehensive Summation</h1><p>For a long time, people hold the belief that the unrealism of generated images are due to the Gaussian assumptions. This paper rigorously analyses this belief, and concludes that this common belief is not true. This paper deduces that unrealism may come from the dimension of manifold <script type="math/tex">r</script> being smaller than images <script type="math/tex">d</script>. </p>
+<p>Dai and Wizf define <script type="math/tex">p_{gt}(\mathbf{x}) \triangleq \mu_{gt}(d \mathbf{x})</script>, where <script type="math/tex">gt</script> stands for “ground truth”. The objective of VAE is to have </p>
+<script type="math/tex; mode=display">
+p_{\theta}(\mathbf{x}) = p_{gt}(\mathbf{x})</script><p>Dai and Wizf first show that when <script type="math/tex">d = r</script>, the following holds</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\lim_{t \rightarrow \infty} D_{KL} [q_{\Phi_{t}^{\ast}}(\mathbf{z} | \mathbf{x}) || p_{\theta_{t}^{\ast}}(\mathbf{z} | \mathbf{x})] = 0
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\lim_{t \rightarrow \infty} p_{\theta_{t}^{\ast}} (\mathbf{x}) = p_{gt}(\mathbf{x})
+\end{aligned}
+\end{equation}</script><p>However, when <script type="math/tex">r < d</script> and assume the latent dimension of <script type="math/tex">k</script>, we have </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\lim_{t \rightarrow \infty} D_{KL} [q_{\Phi_{t}^{\ast}}(\mathbf{z} | \mathbf{x}) || p_{\theta_{t}^{\ast}}(\mathbf{z} | \mathbf{x})] = 0
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\lim_{t \rightarrow \infty} \int_{\mathbf{X}} -\log p_{\theta_{t}^{\ast}}(\mathbf{x}) \mu_{gt} (d \mathbf{x}) = -\infty
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\lim_{t \rightarrow \infty} \int_{\mathbf{x} \in A} p_{\theta_{t}^{\ast}}(\mathbf{x}) d \mathbf{x} = \mu_{gt}(A \cap \mathbf{X})
+\end{aligned}
+\end{equation}</script><p>In other words, when <script type="math/tex">r < d</script>, the learned density of the input $\mathbf{x}$ will be deemed to be unequal to <script type="math/tex">\mu_{gt}(\mathbf{x})</script>. Therefore, we have </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+q_{\Phi}(\mathbf{z}) \triangleq \int_{\mathbf{X}} q_{\Phi}(\mathbf{z} | \mathbf{x}) \mu_{gt}(d \mathbf{x}) \neq \int_{\mathbb{R}^{d}} p_{\theta}(\mathbf{z} | \mathbf{x}) p_{\theta}(\mathbf{x})d\mathbf{x} = \mathcal{N}(\mathbf{z} | 0, \mathbf{I})
+\end{aligned}
+\end{equation}</script><p>This reveals that when <script type="math/tex">r < d</script>, the variational distribution of latent variable <script type="math/tex">\mathbf{z}</script> will not be the same as the prior <script type="math/tex">p_{\theta}(\mathbf{z})</script>. </p>
+<p>In order to fill the divergence between <script type="math/tex">q_{\Phi}(\mathbf{z})</script> and <script type="math/tex">p_{\theta}(\mathbf{z})</script>, we train a second VAE with latent variable <script type="math/tex">\mathbf{u} \sim \mathcal{N}(0, \mathbf{I})</script> to learn <script type="math/tex">\mathbf{z}</script>. Since the dimensions of <script type="math/tex">\mathbf{z}</script> and <script type="math/tex">\mathbf{u}</script> are the same, <script type="math/tex">q_{\Phi'}(\mathbf{u})</script> is expected to be the same as <script type="math/tex">p_{\theta'}(\mathbf{u})</script>. </p>
+<p>Furthermore, instead making the decoder deterministic, we add a noise <script type="math/tex">\gamma</script> to it so that the decoder distributes as </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\mathcal{N}(f_{\mu_{x}}(\mathbf{z}; \theta_{\gamma}^{\ast}); \gamma \cdot \mathbf{I})
+\end{equation}</script><p>As a consequence, the reconstruction loss becomes </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\frac{1}{\gamma} \left \Vert \mathbf{x} - f_{\mu_{x}}[\mathbf{z}; \theta_{\gamma}^{\ast}] \right \Vert_{2} ^{2}] + d \log 2\pi \gamma
+\end{equation}</script><h1 id="3-Experimental-Results"><a href="#3-Experimental-Results" class="headerlink" title="3. Experimental Results"></a>3. Experimental Results</h1><h2 id="3-1-FID-Scores"><a href="#3-1-FID-Scores" class="headerlink" title="3.1 FID Scores"></a>3.1 FID Scores</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Datasets</th>
+<th style="text-align:center">Operation</th>
+<th style="text-align:right">FID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CELEBA</td>
+<td style="text-align:center">Sample <script type="math/tex">\mathbf{z}</script></td>
+<td style="text-align:right">48.16</td>
+</tr>
+<tr>
+<td>CELEBA</td>
+<td style="text-align:center">Sample <script type="math/tex">\mathbf{u}</script> with learned <script type="math/tex">\gamma</script></td>
+<td style="text-align:right">44.46</td>
+</tr>
+<tr>
+<td>CELEBA</td>
+<td style="text-align:center">Sample <script type="math/tex">\mathbf{u}</script> with <script type="math/tex">\gamma</script> being 0</td>
+<td style="text-align:right">45.54</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="3-2-Generative-Images"><a href="#3-2-Generative-Images" class="headerlink" title="3.2 Generative Images"></a>3.2 Generative Images</h2><h3 id="3-2-1-CELEBA-Reconstruction"><a href="#3-2-1-CELEBA-Reconstruction" class="headerlink" title="3.2.1 CELEBA Reconstruction"></a>3.2.1 CELEBA Reconstruction</h3><center>
+<img src="/2019/05/06/paper-notes-two-stage-vae/celeba_reconstruction.jpg" width="600" hspace="10">
+</center>
 
-block main
-  include mixins/post.pug
-  +post(page, 'post')
+<h3 id="3-2-2-CELEBA-Learned-Gamma"><a href="#3-2-2-CELEBA-Learned-Gamma" class="headerlink" title="3.2.2 CELEBA Learned Gamma"></a>3.2.2 CELEBA Learned Gamma</h3><center>
+<img src="/2019/05/06/paper-notes-two-stage-vae/celeba_u_gamma.jpg" width="600" hspace="10">
+</center>
 
-  //-
-  include plugins/reward.pug
+<h3 id="3-2-3-CELEBA-0-Gamma"><a href="#3-2-3-CELEBA-0-Gamma" class="headerlink" title="3.2.3 CELEBA 0 Gamma"></a>3.2.3 CELEBA 0 Gamma</h3><center>
+<img src="/2019/05/06/paper-notes-two-stage-vae/celeba_u_0_gamma.jpg" width="600" hspace="10">
+</center>
 
-  //- comment
-  if theme.comment_plugin == 'valine'
-    include plugins/valine.pug
-  else
-    include plugins/livere.pug
-
-  //- mathjax
-  if page.mathjax
-    include plugins/mathjax.pug
+<h1 id="4-Implementation-Insights"><a href="#4-Implementation-Insights" class="headerlink" title="4. Implementation Insights"></a>4. Implementation Insights</h1><p>Dai and David to some extent sample from the previous trained $\mathbf{z}$, which have been well trained to generate high-quality images and of course can demonstrate good FID scores. I personally do not think this is an well-supported improvements. The learning of <script type="math/tex">\mathbf{\gamma}</script> is inspiring of making decoder undeterministic though. </p>
+<h1 id="5-Further-Thoughts"><a href="#5-Further-Thoughts" class="headerlink" title="5. Further Thoughts"></a>5. Further Thoughts</h1><p>How about to make a metric to evaluate originality of generative models. </p>
+<p>Tuning gamma can get FID of 43.53, with gamma being 0.5. </p>
+</div></header></article><section class="reward"><a class="btn-reward" href="#">打赏</a><div class="reward-wrapper clearfix"><img src="/img/wechat.png" title="支付宝"></div></section></main><footer class="foot"><div class="foot-copy">&copy; 2016 - 2019 Zhenyue Qin</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
