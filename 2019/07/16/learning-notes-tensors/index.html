@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Tensors for Beginners | Deep Mental Artificial Intelligence</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Deep Learning, Machine Learning">
+  
+
+  <meta name="description" content="I come from a computer science background. Recently I was completely obsessed with the impressive performance of neural networks or deep learning. As a consequence of this addiction, I started impleme">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tensors for Beginners">
+<meta property="og:url" content="https://zhenyueqin.github.io/2019/07/16/learning-notes-tensors/index.html">
+<meta property="og:site_name" content="Deep Mental Artificial Intelligence">
+<meta property="og:description" content="I come from a computer science background. Recently I was completely obsessed with the impressive performance of neural networks or deep learning. As a consequence of this addiction, I started impleme">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/07/16/learning-notes-tensors/schrodingers_poster.jpg">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/07/16/learning-notes-tensors/quantum_entanglement.jpg">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/07/16/learning-notes-tensors/quantum_entanglement_illus.jpg">
+<meta property="og:image" content="https://zhenyueqin.github.io/2019/07/16/learning-notes-tensors/change_of_coordinate_systems.png">
+<meta property="og:updated_time" content="2019-07-16T23:27:36.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tensors for Beginners">
+<meta name="twitter:description" content="I come from a computer science background. Recently I was completely obsessed with the impressive performance of neural networks or deep learning. As a consequence of this addiction, I started impleme">
+<meta name="twitter:image" content="https://zhenyueqin.github.io/2019/07/16/learning-notes-tensors/schrodingers_poster.jpg">
+
+  
+
+  
+    <link rel="icon" href="/images/general/Hua-Round.png">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-learning-notes-tensors" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Tensors for Beginners</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.07.16</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Zhenyue Qin</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>I come from a computer science background. Recently I was completely obsessed with the impressive performance of neural networks or deep learning. As a consequence of this addiction, I started implementing my own neural networks, whereby I saw the word “tensor” casually mentioned in literature. What actually is a tensor? It seems to be murky despite its prevailing appearance. This post aims to dispel this mystification.</p>
+<h1 id="1-Motivation"><a href="#1-Motivation" class="headerlink" title="1. Motivation"></a>1. Motivation</h1><p>In the contemporary machine learning community, the word “tensor” seems to have turned to be a buzzword and omnipresent. We are dazzled by it in the documents of TensorFlow and PyTorch. Everyone seems to be using it, yet seemingly no one knows what it actually means. This blog will walk with you to discover its profound meanings. </p>
+<p>Tensors tackle geometry. In the tensor-concerned field, we mean “geometry” not by those intuitive geometries we learned in schools, but a more fundamental subject. One example that is just right can be Einstein’s general relativity. His statements such as “space-time is curved” or “the universe is expanding” have leveraged the concept of “tensor”. For example, in his famous Einstein’s field equation</p>
+<script type="math/tex; mode=display">
+R_{\mu \nu} - {1 \over 2}g_{\mu \nu}\,R + g_{\mu \nu} \Lambda = {8 \pi G \over c^4} T_{\mu \nu}</script><p>the terms <script type="math/tex">g_{\mu \nu}</script> and <script type="math/tex">T_{\mu \nu}</script> are tensors, metric tensors if to be more precise. </p>
+<p>Nowadays quantum mechanics and quantum computing also become trendy. It is common to see “Schrödinger’s Cat” in various places such as novels, movies and so on. This experiment depicts the cat is either live or died, which introduces a fancy word called “quantum superposition”. In fact, this obscure word is just mystifying. Quantum superposition is just simply a linear combination, <script type="math/tex">\vec{\psi} = a \vec{v} + b \vec{w}</script>, which combines simpler vectors to more complicated ones. </p>
+<center>
+<img src="/2019/07/16/learning-notes-tensors/schrodingers_poster.jpg" width="400" hspace="10">
+</center>
+
+<p>Another prodigious phenomenon in physics is “Quantum Entanglement”, which illustrates a particle can influence another related particle no matter how far they are from. </p>
+<center>
+<img src="/2019/07/16/learning-notes-tensors/quantum_entanglement.jpg" width="400" hspace="10">
+</center>
+
+<center>
+<img src="/2019/07/16/learning-notes-tensors/quantum_entanglement_illus.jpg" width="400">
+</center>
+
+<p>Formally we describe it as <script type="math/tex">\vec{\psi} \bigotimes \vec{\phi}</script>. The symbol <script type="math/tex">\bigotimes</script> is a tensor product. As the figure above demonstrates, it combines two geometrical spaces to form a more complicated geometrical space, where the entangled particles live. </p>
+<h1 id="2-Tensor-Definition"><a href="#2-Tensor-Definition" class="headerlink" title="2. Tensor Definition"></a>2. Tensor Definition</h1><p>There exists an anarchy in the definitions of tensors. We hereby present different versions of definitions to present a more comprehensive understanding.  </p>
+<h2 id="2-1-Multi-Dimensional-Array-of-Numbers"><a href="#2-1-Multi-Dimensional-Array-of-Numbers" class="headerlink" title="2.1 Multi-Dimensional Array of Numbers"></a>2.1 Multi-Dimensional Array of Numbers</h2><p>Before we dive into the definition of a tensor, let’s first define what is a rank for tensor. The rank of a tensor specifies how many axes you need to specify it. For example, the rank for a scalar is 0 since it does not have any direction, and the rank for a vector is 1 since it has only one direction. Based on rank, some programmers define a tensor as a multi-dimensional array of numbers. For example, I noticed that PyTorch defines its tensor as </p>
+<blockquote>
+<p>A <code>torch.Tensor</code> is a multi-dimensional matrix containing elements of a single data type.</p>
+</blockquote>
+<p>This definition is wrong, since a tensor should be invariant of a change in basis. So we introduce another new definition. </p>
+<h2 id="2-2-Coordinate-Definition"><a href="#2-2-Coordinate-Definition" class="headerlink" title="2.2 Coordinate Definition"></a>2.2 Coordinate Definition</h2><blockquote>
+<p>A tensor as an object that is invariant under a change of coordinates, and has components that change in a special, predicable way under a change of coordinates. </p>
+</blockquote>
+<p>To be more specific, a tensor’s magnitude and direction are invariant regardless of different coordinate systems. Taking the figure below as an example, the same vector (green) will be expressed as different coordinates under different coordinate systems. In sum, vectors are invariant, yet vector components are not invariant. The process of changing coordinate systems and components accordingly is called the forward and backward transformation, which will be explained in more detailed later. </p>
+<center>
+<img src="/2019/07/16/learning-notes-tensors/change_of_coordinate_systems.png" width="800">
+</center>
+
+<h2 id="2-3-Abstract-Definition"><a href="#2-3-Abstract-Definition" class="headerlink" title="2.3 Abstract Definition"></a>2.3 Abstract Definition</h2><blockquote>
+<p>A tensor is a collection of vectors and covectors combined together using the tensor product. </p>
+</blockquote>
+<p>This definition is abstract, we will explain its meaning in the later sections. </p>
+<h1 id="3-Forward-amp-Backward-Transformation"><a href="#3-Forward-amp-Backward-Transformation" class="headerlink" title="3. Forward &amp; Backward Transformation"></a>3. Forward &amp; Backward Transformation</h1>
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == true ? true : false;
+        var verify = 'true' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "",
+            appKey: "",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
