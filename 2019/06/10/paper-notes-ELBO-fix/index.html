@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Zhenyue Qin"><link rel="alternative" href="/atom.xml" title="Deep Neuropathic Networks" type="application/atom+xml"><link rel="icon" href="/images/general/Hua-Round.png"><title>Paper Notes on Fixing a Broken ELBO - Deep Neuropathic Networks</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">Deep Neuropathic Networks</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">Articles</a></li><li class="head-nav__item"><a class="head-nav__link" href="/research">Research</a></li><li class="head-nav__item"><a class="head-nav__link" href="/music">Music</a></li><li class="head-nav__item"><a class="head-nav__link" href="/about">About</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time class="post__time" datetime="2019-06-10T07:53:46.000Z">2019 - 06 - 10 17:53:46</time><h1 class="post__title"><a href="/2019/06/10/paper-notes-ELBO-fix/">Paper Notes on Fixing a Broken ELBO</a></h1><div class="post__main echo"><h1 id="1-Why-we-say-ELBO-is-broken"><a href="#1-Why-we-say-ELBO-is-broken" class="headerlink" title="1. Why we say ELBO is broken"></a>1. Why we say ELBO is broken</h1><p>Evidence of Lower Bound Observation (ELBO) is defined as</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + D_{KL} \big [ e(z | x) || m(z) \big ] 
+\end{equation}</script><p>where <script type="math/tex">e</script> stands for “encoder”, <script type="math/tex">d</script> refers to “decoder”, and <script type="math/tex">m</script> represents marginal. Intuitively, the only thing that this formula says is that <script type="math/tex">z</script> should contain as much information as <script type="math/tex">x</script>, and maximally utilise the prior <script type="math/tex">m(z)</script>. </p>
+<p>Nonetheless and importantly, it does not constraint the balance between these two conflicting objectives. This is problematic since two VAEs may have the same ELBO yet different balances of <script type="math/tex">E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]</script> and <script type="math/tex">D_{KL} \big [ e(z | x) || m(z) \big ]</script>. </p>
+<p>This paper tackles this neglance by introduces a coefficient <script type="math/tex">\beta</script> to adjust the balance of the two terms above. The formula becomes </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\log p_{\theta}(x) = E_{z \sim e(z | x)} \big [ \log d(x | z) \big ]  + \beta \cdot D_{KL} \big [ e(z | x) || m(z) \big ] 
+\end{equation}</script><p>This form is exactly the same as <script type="math/tex">\beta</script>-VAE, but is derived from the perspective of information theory. To begin with, we define three terms: </p>
+<ol>
+<li><script type="math/tex; mode=display">H \equiv - E_{x \sim p^{*}} \big[ \log p^{*}(x) \big ]</script></li>
+<li><script type="math/tex; mode=display">D \equiv - E_{x \sim p^{*}} \big[ E_{z \sim e(z | x)} \big [ \log d(x | z) \big ] \big ]</script></li>
+<li><script type="math/tex; mode=display">R \equiv E_{x \sim p^{*}} D_{KL} \big [ e(z | x) || m(z) \big ]</script></li>
+</ol>
+<p>So that</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+ELBO = -(D + R)
+\end{equation}</script><p>Intuitively, <script type="math/tex">D</script> is the distortion, or reconstruction error, <script type="math/tex">R</script> is the extra bits to express <script type="math/tex">x</script> from the prior <script type="math/tex">z</script>. Apparently, more <script type="math/tex">R</script> can lead to less <script type="math/tex">D</script> since we have more information about <script type="math/tex">x</script>. We present visualisations in this article.</p>
+<p>We vary the content of <script type="math/tex">e(z | x)</script> and <script type="math/tex">m(z)</script>. Please note that <script type="math/tex">m(z)</script>‘s volume varies and it can be zero for some input <script type="math/tex">x</script>. The first figure shows that the reconstruction can decrease its quality. All of these figures follow the assumption that decoders are perfect to maximally leverage the incoming information. </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/Balanced.png" width="400" hspace="10">
+</center>
+
+<p>The following two figures show cases when distortion <script type="math/tex">D</script> is maximised or minimised.<br>Distortion Maximisation: </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/Max-D.png" width="400" hspace="10">
+</center>
+
+<p>Distortion Minimisation: </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/Min-D.png" width="400" hspace="10">
+</center>
+
+<p>ELBO Formula: </p>
+<center>
+<img src="/2019/06/10/paper-notes-ELBO-fix/ELBO-Formula.png" width="400" hspace="10">
+</center>
+
+<p>Intuitively, we have <script type="math/tex">H - R >= D</script>, since all the information we have about <script type="math/tex">x</script> is from <script type="math/tex">R</script>. Nonetheless, our encoders and decoders may not be perfect and lose information, so the inequality holds. </p>
+</div></header></article></main><footer class="foot"><div class="foot-copy">&copy; 1994 - 2020 Zhenyue Qin</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>

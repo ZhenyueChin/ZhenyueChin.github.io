@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Zhenyue Qin"><link rel="alternative" href="/atom.xml" title="Deep Neuropathic Networks" type="application/atom+xml"><link rel="icon" href="/images/general/Hua-Round.png"><title>Learning Notes on Expectation-Maximization Algorithm - Deep Neuropathic Networks</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">Deep Neuropathic Networks</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">Articles</a></li><li class="head-nav__item"><a class="head-nav__link" href="/research">Research</a></li><li class="head-nav__item"><a class="head-nav__link" href="/music">Music</a></li><li class="head-nav__item"><a class="head-nav__link" href="/about">About</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time class="post__time" datetime="2019-04-01T07:02:02.000Z">2019 - 04 - 01 18:02:02</time><h1 class="post__title"><a href="/2019/04/01/learning-notes-em/">Learning Notes on Expectation-Maximization Algorithm</a></h1><div class="post__main echo"><p>This post explains the idea of Expectation-Maximization (EM) and why EM is intractable for tackling the problem of constructing an autoencoder. </p>
+<p>The Expectation-Maximization Algorithm is an iterative process, with $n$ randomly sampled latent variables $z$. </p>
+<p>We first define </p>
+<script type="math/tex; mode=display">L(\theta) = \log p_{\theta}(x)</script><p>as the $\log$ likelihood of a random variable $x$. and </p>
+<script type="math/tex; mode=display">L(\theta_{n}) = \log p_{\theta_{n}}(x)</script><p>as the approximated $\log$ likelihood of the random variable $x$. </p>
+<p>We wish to minimise the difference between these two likelihoods, which we express as</p>
+<script type="math/tex; mode=display">
+L(\theta) - L(\theta_{n}) = \log p_{\theta}(x) - \log p_{\theta_{n}}(x) = \Delta(\theta | \theta_{n})</script><p>We then wish to find the $\arg \max$ of $\theta$ so that $\Delta(\theta | \theta_{n})$ is maximised.</p>
+<p>As a consequence of $\theta$ having been altered, we will also need to update $\theta_{n}$. </p>
+<p>The concrete algorithm is as follows: </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+\Sigma(\theta | \theta_{n}) &= \log p_{\theta}(x) - \log p_{\theta_{n}} (x) \\
+&= \log p_{\theta} (x) - \log p_{\theta_{n}} (x) \\ 
+&= \log \int p_{\theta} (x | z) p_{\theta} (z) dz - \log p_{\theta_{n}} (x) \\ 
+&= \log \int p_{\theta} (x | z) p_{\theta}(z) \frac{q_{\theta_{n}}(z | x)}{q_{\theta_{n}}(z | x)} dz - \log p_{\theta_{n}}(x) \\ 
+&= \log E_{z \sim q_{\theta_{n}}(z | x)} \frac{p_{\theta}(x | z) p_{\theta} (z)}{q_{\theta_{n}}(z | x)} - \log p_{\theta_{n}}(x) \\
+&\geq E_{z \sim q_{\theta_{n}}(z | x)} \log \frac{p_{\theta}(x | z)p_{\theta}(z)}{q_{\theta_{n}}(z | x)} - \log p_{\theta_{n}}(x) \\ 
+&= E_{z \sim q_{\theta_{n}} (z | x)} \log \frac{p_{\theta}(x | z) p_{\theta}(z)}{q_{\theta_{n}}(z | x) p_{\theta_{n}} (x)}
+\end{aligned}
+\end{equation}</script><p>In order to find the $\arg \max$ of $\theta$ so that $\Delta(\theta | \theta_{n})$ is maximised, we freeze </p>
+<script type="math/tex; mode=display">
+q_{\theta_{n}}(x)</script><p>and do</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+L(\theta) - L(\theta_{n}) &= \underset{\theta}{\arg \max} \big \{ \log p_{\theta_{n}} (x) + \Delta(\theta | \theta_{n}) \big \} \\ 
+&= \underset{\theta}{\arg \max} \big \{ \log p_{\theta_{n}} (x) + E_{z \sim q_{\theta_{n}}(z | x)} \log \frac{p_{\theta} (x | z) p_{\theta} (z)}{q_{\theta_{n}}(z | x) p_{\theta_{n}}(x)} \big \} \\ 
+&= \underset{\theta}{\arg \max} \big \{ E_{z \sim q_{\theta_{n}}(z | x)} \log p_{\theta} (x | z) p_{\theta}(z) \big \}
+\end{aligned}
+\end{equation}</script><p>The above equation is a form of an autoencoder, as the Figure below shows. The latent vectors $z$ are fixed, and we do SGD for the decoder. Afterwards, we update encoder and make the parameters of the decoder fixed. </p>
+<center>
+<img src="/2019/04/01/learning-notes-em/em_autoencoder.jpg" width="400" hspace="10">
+</center>
+
+<p>If we solve the generative model in this way, we need to do the SGD for $\ln p(x, z | \theta)$, followed by do the SGD for $p(z | x, \theta)$. This will be very time consuming (intractable). This is because unlike VAE, where we have a prior on the distribution $p(z)$, EC has to generate a large number of $z$ and then send them to the decoder to get $\hat{x}$. </p>
+<p>Moreover, this will not guarantee the smoothness of the learned $z$ space. </p>
+</div></header></article><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  }
+});
+MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for(i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="//cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></main><footer class="foot"><div class="foot-copy">&copy; 1994 - 2020 Zhenyue Qin</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>

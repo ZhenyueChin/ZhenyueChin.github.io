@@ -1,0 +1,12 @@
+1. 提取的$\hat{y}$的质量肯定对最终生成的质量会造成影响. 我们能不能把提取$\hat{y}$的过程也加进网络里面. 使得训练变得end-to-end. 
+2. 能不能用互信息的思想来刻画这整个过程. 
+3. Reconstruction Loss
+4. 能不能把它做成一个ResNet. 
+5. 改善清晰度. 
+6. 学不到一些细节, 比如袜子和鞋子. 
+7. 背景几乎都学没了.
+
+* 文章里面说"the algorithm will assume both viewpoints are related". 这个relation在公式里面是怎么体现出来的. 
+* 这个COCO是个重点. 很多问题都是由它引起的. 
+* shape里面还是包含的有appearance的信息. 
+* Capsule networks? 
